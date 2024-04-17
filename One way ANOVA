@@ -1,0 +1,44 @@
+#import libraries
+import pandas as pd
+from scipy.stats import f_oneway
+#reading excel file
+df = pd.read_excel('D:/Madhubalaji/Probability/Anova_dataset.xlsx')
+df.head()
+print(df.columns)
+
+# Extract the tensile strength measurement data column and the machine number column
+Measurement = df['Measurement']
+Machine_number = df["Machine"]
+# Group the tensile strengths based on machine numbers
+
+grouped_data = [Measurement[Machine_number == i] for i in range (1,7)]
+print(grouped_data)
+
+#Performing ANOVA
+f_statistic, p_value = f_oneway(*grouped_data)
+alpha =0.5
+if p_value < alpha:
+    print("Mean tesnsile strengths signficantly differ for six machine(Reject null hypothesis)")
+else:
+    print("Mean tensile strengths do not differ significantly for the six machines (Fail to reject null hypothesis)")
+
+#PART –B 
+#Reading excel sheet 2
+df_b = pd.read_excel('D:/Madhubalaji/Probability/Anova_dataset.xlsx', sheet_name = "Part B")
+ df_b.head( )
+print(df_b.columns)
+# Extract the sorption rate data column and the solvent type column
+sorption_rates = df_b['Samples']
+solvent_type = df_b['Solvent']
+#GROUP SORPTION RATES BASED ON SOLVENT
+Grouped_data_b = [sorption_rates[solvent_type == i] for i in df_b['Solvent'].unique()]
+print(Grouped_data_b)
+# performing ANOVA
+f_statistic_b, p_value_b = f_oneway(*Grouped_data_b)
+print(p_value_b)
+#Testing nullhypothesis AND INTERPRETATION OF RESULTS
+if p_value_b < alpha:
+    print("There is significant difference in mean sorption rates of three solvents(reject null hypothesis)")
+else:
+    print("There is significant difference in mean sorption rates of three solvents(Fail to reject null hypothesis)")
+
