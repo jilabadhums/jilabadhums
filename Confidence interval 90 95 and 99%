@@ -1,0 +1,80 @@
+#import libraries
+
+import pandas as pd
+from scipy.stats import t
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+
+#reading excel file
+excel_file = 'D:\Madhubalaji\Probability\FILE.xlsx'
+df = pd.read_excel(excel_file)
+print(df.head())
+print(df.columns)
+
+Column_name = 'Amount Covered'
+#Removing $ symbol from a column
+df["Amount Covered"] =df["Amount Covered"].str.replace("$", "")
+#knowing the datatype
+print(df["Amount Covered"].dtype)
+#changing the datatype
+df["Amount Covered"] = pd.to_numeric(df["Amount Covered"])
+print(df["Amount Covered"].dtype)
+
+#mean and std calculations
+Sample_size = 49
+Sample_mean = df["Amount Covered"].mean()
+print("Sample mean is ", Sample_mean)
+Sample_standarddeviation = df["Amount Covered"].std()
+print("Sample Standard deviation is", Sample_standarddeviation)
+
+#Confidence level 90%
+Confidence_level = 0.90
+Degrees_of_freedom = Sample_size-1
+t_critical = t.ppf(Confidence_level + (1 - Confidence_level) / 2, Degrees_of_freedom)
+print("t-critical value for sample size =", Sample_size, "and", int(Confidence_level * 100), "% confidence level:", t_critical)
+Margin_of_Error = t_critical * (Sample_standarddeviation / math.sqrt(Sample_size))
+print("Margin of Error is", Margin_of_Error)
+
+print(df.head())
+
+Lowerbound = Sample_mean - Margin_of_Error
+Upperbound = Sample_mean + Margin_of_Error
+print("At confidence interval of 90%, lowerbound is", Lowerbound.round(2), "and Upperbound is", Upperbound.round(2))
+
+
+#Confidence level 95%
+Confidence_level = 0.95
+Degrees_of_freedom = Sample_size-1
+t_critical = t.ppf(Confidence_level + (1 - Confidence_level) / 2, Degrees_of_freedom)
+print("t-critical value for sample size =", Sample_size, "and", int(Confidence_level * 100), "% confidence level:", t_critical)
+Margin_of_Error = t_critical * (Sample_standarddeviation / math.sqrt(Sample_size))
+print("Margin of Error is", Margin_of_Error)
+Lowerbound = Sample_mean - Margin_of_Error
+Upperbound = Sample_mean + Margin_of_Error
+print("At confidence interval of 95%, lowerbound is", Lowerbound.round(2), "and Upperbound is", Upperbound.round(2))
+
+#Confidence level 99%
+Confidence_level = 0.99
+Degrees_of_freedom = Sample_size-1
+t_critical = t.ppf(Confidence_level + (1 - Confidence_level) / 2, Degrees_of_freedom)
+print("t-critical value for sample size =", Sample_size, "and", int(Confidence_level * 100), "% confidence level:", t_critical)
+Margin_of_Error = t_critical * (Sample_standarddeviation / math.sqrt(Sample_size))
+print("Margin of Error is", Margin_of_Error)
+Lowerbound = Sample_mean - Margin_of_Error
+Upperbound = Sample_mean + Margin_of_Error
+print("At confidence interval of 99%, lowerbound is", Lowerbound.round(2), "and Upperbound is", Upperbound.round(2))
+
+Reimbursement_amount = df['Amount Covered'].tolist()
+
+#Drawing a histogram
+plt.hist(Reimbursement_amount, bins =10,color='skyblue', edgecolor='black')
+plt.xlabel('Reimbursement_amount')
+plt.ylabel('Frequency')
+plt.title('Histogram of Reimbusement amount')
+plt.show()
+
+#Descriptive statistics
+statistics = df['Amount Covered'].describe()
+statistics_rounded =statistics.round(2)
+print(statistics_rounded)
